@@ -1,6 +1,8 @@
 const input = document.querySelector(".input")
 const btn = document.querySelector(".btn")
 const para = document.querySelector(".dec")
+const logos = document.querySelector(".logos")
+const Mlogo = document.querySelector(".Mlogo")
 
 //predictions result as objects
 let first
@@ -13,20 +15,29 @@ let Pthird
 //canvas var
 let ctx
 
+
+
 btn.addEventListener("click",async()=>{
-  gsap.to(".title", {duration: 1, text: `${input.value.toUpperCase()}`, ease: "power2"});
+  Mlogo.style.display=`none`
+  gsap.to(".title", {duration: 1.94, text: `${input.value.toUpperCase()}`, ease: "power2",fontSize:`1.6rem`});
   para.style.display=`none`
+  logos.style.display=`none`
+  document.querySelector(".info").innerHTML=``
   //creating a new canvas
   document.querySelector(".visual").innerHTML = '<canvas id="myChart"></canvas>';
   ctx = document.getElementById('myChart');
     call()
     input.value=""
+
 })
 
 //text animation
 
 gsap.from(".title", {duration: 1.4, text: "", ease: "none"});
-
+gsap.from(".Mlogo", {
+  x: 100, 
+  duration: 1.4
+});
 //geting the predictions from the API
 async function call(){
     const Na = input.value
@@ -38,13 +49,39 @@ async function call(){
     second= prediction.country[1].country_id
     third = prediction.country[2].country_id
 
+    
     Pfirst = prediction.country[0].probability
     Psecond= prediction.country[1].probability
     Pthird = prediction.country[2].probability
 
-    console.log(Pfirst*100,Psecond*100,Pthird*100);
+    
+    const info = await fetch(`Fid/${first}`)
+    const Cinfo = await info.json()
+    const Cname = Cinfo[1][0].name
+    document.querySelector(".info").innerHTML = `
+     <p class="Pinfo" >
+    you are most likely from<br><span class="infoC F">${Cname}
+    </span> with a probabilty of 
+    <span class="infoProba">${Pfirst.toFixed(3)} </span><br>
+    <span class="infoC S">${second}
+    </span> with a probabilty of 
+    <span class="infoProba">${Psecond.toFixed(3)} </span><br>
+    <span class="infoC T">${third}
+    </span> with a probabilty of 
+    <span class="infoProba">${Pthird.toFixed(3)} </span>
+    </p>`;
+    gsap.from(".Pinfo", {
+      opacity: 0, 
+      y: 100, 
+      duration: 1
+    });
 
     show(first,second,third,Pfirst,Psecond,Pthird)
+    gsap.from(".visual", {
+      opacity: 0, 
+      y: 100, 
+      duration: 1
+    });
 }
 
 //show data
