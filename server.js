@@ -1,9 +1,11 @@
 const express = require('express');
 const app = express();
 const Exapi = require('request');
-app.listen(5500, () => {
-    console.log(`Starting server at 5500 `);
-  });
+
+
+const port = process.env.PORT || 5500;
+app.listen(port, () => console.log(`Listening to port ${port}`));
+
   app.use(express.static('./public/css'));
 
 
