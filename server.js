@@ -3,8 +3,10 @@ const app = express();
 const Exapi = require('request');
 
 
-const port = process.env.PORT || 5500;
-app.listen(port, () => console.log(`Listening to port ${port}`));
+const port = process.env.PORT
+app.listen(port, () => {
+    console.log(`Starting server at 5500 `);
+  });
 
   app.use(express.static('./public/css'));
 
